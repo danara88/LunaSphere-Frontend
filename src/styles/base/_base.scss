@@ -1,0 +1,21 @@
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+  height: 100vh;
+  padding: 0rem;
+  margin: 0rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-regular;
+  height: 100vh;
+  background-color: $color-primary-50;
+}

@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/**
+* 7-1 Pattern for a manageable codebase.
+*
+* The 7-1 pattern organizes SCSS files into "7" thematic directories, 
+* which are then imported into a single SCSS file (main.scss), compiled into 
+* the final CSS. 
+*
+*This structure keeps your codebase modular and organized
+* 
+* More details: https://openclassrooms.com/en/courses/5625786-produce-maintainable-css-with-sass/5723581-use-the-7-1-pattern-for-a-manageable-codebase
+* BEM: https://en.bem.info/methodology/quick-start/#block
+*/
+
+/**
+* Utils:
+* Store variables, functions and mixins
+*/
+@import 'utils/variables', 'utils/mixins';
+
+/**
+* Vendors:
+* Third-party library style sheets (Ex. Bootstrap, Jquery, etc)
+*/
+@import 'vendors/normalize', 'vendors/tailwind';
+
+/**
+* Base:
+* Define the foundation of the application (Ex. Typography and norms you want
+* applied site-wide)
+*/
+@import 'base/reset', 'base/base', 'base/typography';
+
+/**s
+* Components:
+* Store BEM blocks that are more self-contained.
+* Ex. Buttons.
+*/
+@import 'components/buttons', 'components/inputs', 'components/loader';
+
+/**
+* Layouts:
+* Store BEM blocks which contain things that can be reused.
+* Ex. Forms or header for large layouts.
+*/
+// @import 'layouts/auth-layout', 'layouts/auth-form', 'layouts/error-card';
+
+/**
+* Pages:
+* Store BEM blocks that only apply to a single page. Specify
+* rules to a single page and won't be reused elsewhere.
+*/
+
+/**
+* Themes:
+* Thematic code, such as custom styling for Chritmas or Halloween.
+*/
