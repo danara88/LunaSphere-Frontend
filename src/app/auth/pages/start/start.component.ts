@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-start',
+  selector: 'auth-start-page',
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss',
 })

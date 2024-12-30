@@ -1,0 +1,22 @@
+.btn {
+  border-radius: 2.4rem;
+  @apply py-4 px-10;
+  @apply font-semibold;
+  @extend .font-smaller;
+  &-primary {
+    @apply bg-primary-500 text-neutral-100;
+    &--solid {
+      @apply bg-primary-500 text-neutral-100;
+    }
+    &--outline {
+      @apply text-primary-500 bg-neutral-100;
+      border: 0.1rem solid $color-primary-500;
+    }
+    &--link {
+      @apply text-primary-500 bg-neutral-100;
+    }
+  }
+  &-secondary {
+    @apply bg-primary-50 text-primary-500;
+  }
+}
