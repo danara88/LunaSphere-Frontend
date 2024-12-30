@@ -3,6 +3,8 @@
   @apply py-4 px-10;
   @apply font-semibold;
   @extend .font-smaller;
+  outline: none;
+  transition: all 400ms;
   &-primary {
     @apply bg-primary-500 text-neutral-100;
     &--solid {
@@ -15,8 +17,30 @@
     &--link {
       @apply text-primary-500 bg-neutral-100;
     }
+    &:hover {
+      @apply bg-primary-700;
+    }
+    &:active {
+      transition: all 100ms;
+      @apply bg-primary-600;
+    }
+    &:disabled {
+      @apply bg-primary-300;
+      cursor: not-allowed;
+    }
   }
   &-secondary {
     @apply bg-primary-50 text-primary-500;
+    &:hover {
+      background-color: rgba($color-primary-50, 0.6);
+    }
+    &:active {
+      transition: all 100ms;
+      @apply bg-primary-50;
+    }
+    &:disabled {
+      @apply bg-primary-50 text-primary-300;
+      cursor: not-allowed;
+    }
   }
 }

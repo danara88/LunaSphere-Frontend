@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthComponent } from './auth.component';
 import { StartComponent } from '@auth/pages/start/start.component';
+import { PortalAuthOptionsComponent } from '@auth/pages/portal-auth-options/portal-auth-options.component';
+import { AuthComponent } from './auth.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
       {
         path: '',
         component: StartComponent,
+      },
+      {
+        path: 'portal/:portal-type',
+        component: PortalAuthOptionsComponent,
       },
     ],
   },
