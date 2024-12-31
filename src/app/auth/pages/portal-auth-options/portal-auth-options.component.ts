@@ -24,7 +24,7 @@ export class PortalAuthOptionsComponent implements OnInit {
   private authService: AuthService = inject(AuthService);
 
   ngOnInit(): void {
-    this.renderGoogleButton();
+    this.startGoogleAuth2();
     this.activateRouter.params.pipe(take(1)).subscribe((params) => {
       const portalType = params['portal-type'];
       if (!portalType) return;
@@ -43,21 +43,6 @@ export class PortalAuthOptionsComponent implements OnInit {
         return;
       }
     });
-  }
-
-  /**
-   * @method renderGoogleButton
-   * @description Render google sign in button
-   */
-  private renderGoogleButton() {
-    gapi.signin2.render('google-sign-in-btn', {
-      scope: 'profile email',
-      height: 50,
-      width: '100%',
-      longtitle: true,
-      theme: 'dark',
-    });
-    this.startGoogleAuth2();
   }
 
   private async startGoogleAuth2() {

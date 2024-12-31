@@ -44,3 +44,19 @@
     }
   }
 }
+
+.btn-google-sign-in {
+  @apply cursor-pointer flex py-4 px-10 border-solid border border-neutral-300 items-center;
+
+  border-radius: 0.8rem;
+  &__logo {
+    width: 2rem;
+    > img {
+      vertical-align: top;
+      width: 100%;
+    }
+  }
+  &__text {
+    @apply ml-24 font-medium font-smaller;
+  }
+}
