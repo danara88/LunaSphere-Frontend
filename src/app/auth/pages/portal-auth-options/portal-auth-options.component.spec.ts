@@ -8,9 +8,8 @@ describe('PortalAuthOptionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PortalAuthOptionsComponent]
-    })
-    .compileComponents();
+      imports: [PortalAuthOptionsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PortalAuthOptionsComponent);
     component = fixture.componentInstance;

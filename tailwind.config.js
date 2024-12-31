@@ -42,11 +42,19 @@ module.exports = {
       fontWeight: {
         regular: 300,
         medium: 400,
-        semibold: 500,
+        semibold: 700,
         bold: 800,
       },
       fontFamily: {
         primary: ['Manrope', 'serif'],
+      },
+      screens: {
+        // xs implicity applies when no breakpoint prefix
+        sm: '480px', // Starts at 480px and above.
+        md: '712px', // Starts at 712px and above.
+        lg: '960px', // Starts at 960px and above.
+        xl: '1200px', // Starts at 1200px and above.
+        '2xl': '1536px', // Starts at 1536 and above.
       },
     },
   },

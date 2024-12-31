@@ -1,7 +1,7 @@
 .btn {
   border-radius: 2.4rem;
   @apply py-4 px-10;
-  @apply font-semibold;
+  @apply font-medium;
   @extend .font-smaller;
   outline: none;
   transition: all 400ms;
