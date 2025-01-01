@@ -1,5 +1,5 @@
-import { AuthService } from '@/auth/services/auth.service';
-import { Component, inject, OnInit } from '@angular/core';
+import { GoogleService } from '@/auth/services/google.service';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 
@@ -8,23 +8,20 @@ enum AccountTypes {
   individual = 'individual-account',
 }
 
-declare const gapi: any;
-
 @Component({
   selector: 'app-portal-auth-options',
   templateUrl: './portal-auth-options.component.html',
   styleUrl: './portal-auth-options.component.scss',
 })
-export class PortalAuthOptionsComponent implements OnInit {
+export class PortalAuthOptionsComponent implements OnInit, AfterViewInit {
   public accountType: AccountTypes = AccountTypes.business;
   public title: string = '';
   public subTitle: string = '';
 
   private activateRouter: ActivatedRoute = inject(ActivatedRoute);
-  private authService: AuthService = inject(AuthService);
+  public googleService: GoogleService = inject(GoogleService);
 
   ngOnInit(): void {
-    this.startGoogleAuth2();
     this.activateRouter.params.pipe(take(1)).subscribe((params) => {
       const portalType = params['portal-type'];
       if (!portalType) return;
@@ -37,38 +34,18 @@ export class PortalAuthOptionsComponent implements OnInit {
       }
 
       if (portalType === AccountTypes.individual) {
+        this.googleService.initializeGoogleSignIn();
         this.accountType = AccountTypes.individual;
         this.title = 'Individual Portal';
         this.subTitle = 'Search, reserve, enjoy!';
+
         return;
       }
     });
   }
 
-  private async startGoogleAuth2() {
-    await this.authService.googleInit();
-    this.attachSignin(document.getElementById('google-sign-in-btn')!);
-  }
-
-  private attachSignin(element: HTMLElement) {
-    this.authService.auth2.attachClickHandler(
-      element,
-      {},
-      (googleUser: any) => {
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log(id_token);
-        // Login by Google
-        // this.userService.loginGoogle(id_token).subscribe((resp) => {
-        //   // NgZone es utilizado por que el control de la redirección la tiene google y no Angular
-        //   this.ngZone.run(() => {
-        //     // Redirect to dashboard
-        //     this.router.navigateByUrl('/');
-        //   });
-        // });
-      },
-      function (error: any) {
-        alert(JSON.stringify(error, undefined, 2));
-      }
-    );
+  ngAfterViewInit(): void {
+    if (this.accountType === AccountTypes.business) return;
+    this.googleService.renderButton(document.getElementById('google-sign-in-btn')!);
   }
 }

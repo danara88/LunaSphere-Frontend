@@ -9,7 +9,12 @@
   </div>
   <div class="auth__buttons flex flex-col">
     <!-- Google sign in button -->
-    <div id="google-sign-in-btn" class="btn-google-sign-in mb-16">
+    <div
+      id="google-sign-in-btn"
+      class="btn-google-sign-in mb-16"
+      (click)="googleService.triggerGoogleSignIn()"
+      *ngIf="accountType === 'individual-account'"
+    >
       <div class="btn-google-sign-in__logo">
         <img src="assets/images/google.svg" alt="Google Icon" />
       </div>
