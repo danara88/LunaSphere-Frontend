@@ -11,17 +11,11 @@
     <!-- Google sign in button -->
     <div
       id="google-sign-in-btn"
-      class="btn-google-sign-in mb-16"
+      class="mb-16 flex justify-center"
       (click)="googleService.triggerGoogleSignIn()"
       *ngIf="accountType === 'individual-account'"
-    >
-      <div class="btn-google-sign-in__logo">
-        <img src="assets/images/google.svg" alt="Google Icon" />
-      </div>
-      <span class="btn-google-sign-in__text">Continue with google</span>
-    </div>
+    ></div>
     <!-- Google sign in button -->
-
     <button class="btn btn-primary w-full mb-8">Log In</button>
     <button class="btn btn-secondary w-full">Sign Up</button>
   </div>

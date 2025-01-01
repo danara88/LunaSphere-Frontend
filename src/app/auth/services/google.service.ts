@@ -12,6 +12,7 @@ export class GoogleService {
   constructor() {}
 
   private handleCredentialResponse(response: any) {
+    // TODO: Call API to verify google JWT token (Integration pending)
     const { credential: token } = response;
     console.log({ token });
   }
@@ -27,20 +28,17 @@ export class GoogleService {
 
   renderButton(element: HTMLElement) {
     google.accounts.id.renderButton(element, {
-      text: 'continue_with',
       size: 'large',
+      width: 350,
     });
   }
 
   triggerGoogleSignIn() {
     google.accounts.id.prompt((notification: any) => {
       if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        // Try manual rendering
-        google.accounts.id.renderButton(document.getElementById('googleLoginButton'), {
-          theme: 'outline',
-          size: 'large',
-          text: 'continue_with',
-        });
+        console.warn('Google Sign-in aborted or not shown.');
+      } else {
+        console.log('Google Sign-in successful');
       }
     });
   }
