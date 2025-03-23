@@ -1,0 +1,19 @@
+<div class="auth__titles mb-16 mt-8">
+  <h1 class="font-subtitle">Verify Your Email Address 🔐</h1>
+  <p class="font-type-normal mt-8 text-neutral-700">
+    Check your email inbox for the code we sent you. Please enter it below to proceed with email
+    verification.
+  </p>
+  <form [formGroup]="verifyCodesForm">
+    <div class="my-8 flex justify-around">
+      <luna-sphere-input-number [indexOrder]="1" formControlName="digit1" />
+      <luna-sphere-input-number [indexOrder]="2" formControlName="digit2" />
+      <luna-sphere-input-number [indexOrder]="3" formControlName="digit3" />
+      <luna-sphere-input-number [indexOrder]="4" formControlName="digit4" />
+    </div>
+    <p class="font-type-normal font-medium text-neutral-800 text-center mb-8">
+      You can send the code in <span class="text-primary-500">58</span> seconds
+    </p>
+  </form>
+  <luna-sphere-button text="Resend Code" [type]="buttonTypeEnum.OUTLINE" (click)="onSubmit()" />
+</div>

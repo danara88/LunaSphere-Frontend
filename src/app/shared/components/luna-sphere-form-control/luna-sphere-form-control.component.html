@@ -1,0 +1,62 @@
+@if (label()) {
+  <label
+    data-testId="control-label"
+    class="text-neutral-800 font-medium mb-4 inline-block"
+    for="{{ id() }}"
+    >{{ label() }}</label
+  >
+}
+<div
+  data-testId="control-container"
+  class="flex relative justify-items-center py-4 px-8 bg-neutral-200 rounded-2xl"
+  [ngClass]="{ 'bg-neutral-200': !hasError(), 'bg-error-25': hasError() }"
+>
+  <!-- Input icon -->
+  @if (showIcon()) {
+    <i
+      data-testId="control-icon"
+      class="material-icons absolute text-neutral-700"
+      [ngClass]="{ 'text-error-500': hasError(), 'text-neutral-700': !hasError() }"
+      >{{ icon() }}</i
+    >
+  }
+  <!-- Input icon -->
+
+  <!-- Input field -->
+  <input
+    #inputField
+    data-testId="control-input"
+    [id]="id()"
+    [name]="name()"
+    [type]="type"
+    [placeholder]="placeholder()"
+    [ngClass]="{
+      'ml-16': showIcon(),
+      'mr-16': displayVisibilityIcon,
+      'text-error-500': hasError(),
+      'text-neutral-800': !hasError(),
+      'placeholder-error-300': hasError(),
+    }"
+    class="outline-none w-full bg-transparent"
+    [value]="value"
+    [disabled]="disabled"
+    (input)="onInputChange($event)"
+    autocomplete="off"
+    spellcheck="false"
+    aria-autocomplete="none"
+    (blur)="onBlur()"
+  />
+  <!-- Input field -->
+
+  <!-- Password visibility icon -->
+  @if (displayVisibilityIcon) {
+    <i
+      data-testId="visibility-icon"
+      class="material-icons absolute -right-5 text-neutral-700 cursor-pointer w-24 outline-none"
+      (click)="togglePasswordVisibility()"
+    >
+      {{ passwordVisibleIcon }}
+    </i>
+  }
+  <!-- Password visibility icon -->
+</div>

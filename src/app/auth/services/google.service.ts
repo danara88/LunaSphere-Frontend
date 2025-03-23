@@ -6,6 +6,7 @@ declare const google: any;
   providedIn: 'root',
 })
 export class GoogleService {
+  // TODO: Move this value to an env file
   private clientId: string =
     '480006497582-nqs3bufai5ka7gvs7pgdruvmn4oggcd8.apps.googleusercontent.com';
 
