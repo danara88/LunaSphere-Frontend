@@ -1,0 +1,63 @@
+<div class="animate__animated animate__fadeIn">
+  <i class="material-icons cursor-pointer" routerLink="/auth/portal/individual-account"
+    >arrow_back</i
+  >
+  <div class="auth__titles mb-16 mt-8">
+    <h1 class="font-subtitle">Create Account 🪪</h1>
+    <p class="font-type-normal mt-8 text-neutral-700">
+      Sign up now to instantly reserve at your favorite nightclubs!
+    </p>
+  </div>
+  <form [formGroup]="registerForm">
+    <div>
+      <luna-sphere-form-control
+        [id]="'email-field'"
+        [type]="inputTypeEnum.TEXT"
+        [icon]="emailIcon"
+        [label]="'Email Address'"
+        [showIcon]="true"
+        [placeholder]="'johndoe@johndoe.com'"
+        [name]="'email'"
+        [hasError]="formUtils.isInvalidField(registerForm, 'email')"
+        formControlName="email"
+      />
+    </div>
+    @if (formUtils.isInvalidField(registerForm, 'email')) {
+      <span data-testId="email-error-message" class="font-type-smallest text-error-500">
+        {{ formUtils.getFieldError(registerForm, 'email') }}</span
+      >
+    }
+    <div class="mt-5">
+      <luna-sphere-form-control
+        [id]="'password-field'"
+        [type]="inputTypeEnum.PASSWORD"
+        [showIcon]="true"
+        [icon]="passwordFieldIcon"
+        [label]="'Password'"
+        [placeholder]="'Insert your password'"
+        [name]="'password'"
+        [displayVisibilityIcon]="true"
+        [hasError]="formUtils.isInvalidField(registerForm, 'password')"
+        formControlName="password"
+      />
+    </div>
+    @if (formUtils.isInvalidField(registerForm, 'password')) {
+      <span data-testId="password-error-message" class="font-type-smallest text-error-500">
+        {{ formUtils.getFieldError(registerForm, 'password') }}</span
+      >
+    }
+    <div class="flex justify-center my-8">
+      <span class="font-type-normal font-medium"
+        >Already have an account?
+        <a class="font-type-normal font-semibold text-primary-500">Sign In</a></span
+      >
+    </div>
+    <img src="assets/images/or-bar.svg" alt="or bar" class="w-full mb-8" />
+    <div>
+      <!-- Google sign in button -->
+      <div id="google-sign-in-btn" class="mb-8 flex justify-center"></div>
+      <!-- Google sign in button -->
+      <luna-sphere-button text="Sign Up" (click)="onSubmit()" />
+    </div>
+  </form>
+</div>

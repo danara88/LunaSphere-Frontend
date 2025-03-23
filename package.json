@@ -1,11 +1,13 @@
 {
   "name": "luna-sphere-frontend",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
+    "test:coverage": "ng test --code-coverage",
     "test": "ng test",
     "prettier:write": "prettier --write \"src/**/*.+(ts|html|css|scss)\""
   },
@@ -19,6 +21,9 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
+    "@ngrx/effects": "^18.1.0",
+    "@ngrx/store": "^18.1.0",
+    "@ngrx/store-devtools": "^18.1.0",
     "@types/google-one-tap": "^1.2.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -36,6 +41,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^3.4.2",
+    "rxjs-marbles": "^7.0.1",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.5.2"
   }

@@ -5,18 +5,22 @@
   </div>
   <div class="auth__titles text-center mb-16">
     <h1 class="font-subtitle">{{ title }}</h1>
-    <p class="font-normal mt-8 text-neutral-700">{{ subTitle }}</p>
+    <p class="font-type-normal mt-8 text-neutral-700">{{ subTitle }}</p>
   </div>
   <div class="auth__buttons flex flex-col">
     <!-- Google sign in button -->
     <div
       id="google-sign-in-btn"
       class="mb-16 flex justify-center"
-      (click)="googleService.triggerGoogleSignIn()"
-      *ngIf="accountType === 'individual-account'"
+      (click)="triggerGoogleSignIn()"
+      *ngIf="portal === accountTypeEnum.individual"
     ></div>
     <!-- Google sign in button -->
-    <button class="btn btn-primary w-full mb-8">Log In</button>
-    <button class="btn btn-secondary w-full">Sign Up</button>
+    <luna-sphere-button text="Log In" class="mb-8" />
+    <luna-sphere-button
+      text="Sign Up"
+      [variant]="buttonVariantEnum.SECONDARY"
+      (click)="registerRedirect()"
+    />
   </div>
 </div>

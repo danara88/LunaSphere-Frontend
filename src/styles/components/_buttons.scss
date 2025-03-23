@@ -2,7 +2,7 @@
   border-radius: 2.4rem;
   @apply py-4 px-10;
   @apply font-medium;
-  @extend .font-smaller;
+  @extend .font-type-smaller;
   outline: none;
   transition: all 400ms;
   &-primary {

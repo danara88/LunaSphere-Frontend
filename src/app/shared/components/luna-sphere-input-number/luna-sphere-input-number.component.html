@@ -1,0 +1,16 @@
+<input
+  type="number"
+  [tabIndex]="indexOrder()"
+  min="0"
+  max="9"
+  [value]="value"
+  (blur)="onBlur()"
+  (input)="onInputChange($event)"
+  [disabled]="disabled"
+  autocomplete="off"
+  spellcheck="false"
+  aria-autocomplete="none"
+  pattern="[1-9]"
+  oninput="this.value = this.value.replace(/[^1-9]/g, '').slice(0, 1);"
+  class="text-neutral-800 font-semibold font-item appearance-none outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-moz-number-spin-box]:appearance-none bg-neutral-200 p-4 w-32 text-center rounded-2xl"
+/>

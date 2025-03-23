@@ -1,0 +1,19 @@
+@if (isDefaultType) {
+  <div class="auth h-screen flex items-start justify-center sm:items-center">
+    <div
+      class="auth__container py-16 px-8 md:px-24 mx-auto flex flex-col sm:max-w-4xl sm:min-w-4xl w-full bg-neutral-100 rounded-2xl"
+    >
+      <h1 class="font-subtitle text-center">{{ loaderServcie.loaderConfig.title }}</h1>
+      <div class="flex justify-center my-8">
+        <luna-sphere-spinner />
+      </div>
+      <p class="font-type-normal text-center text-neutral-700">
+        {{ loaderServcie.loaderConfig.description }}
+      </p>
+    </div>
+  </div>
+}
+
+@if (isFullType) {
+  <luna-sphere-spinner [spinnerType]="loaderServcie.loaderConfig.spinnerType" />
+}
