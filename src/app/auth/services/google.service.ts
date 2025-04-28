@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+
+import { googleSignInRequested } from '../store';
 
 declare const google: any;
 
@@ -6,21 +10,24 @@ declare const google: any;
   providedIn: 'root',
 })
 export class GoogleService {
-  // TODO: Move this value to an env file
-  private clientId: string =
-    '480006497582-nqs3bufai5ka7gvs7pgdruvmn4oggcd8.apps.googleusercontent.com';
+  private readonly _store = inject(Store);
 
   constructor() {}
 
   private handleCredentialResponse(response: any) {
-    // TODO: Call API to verify google JWT token (Integration pending)
     const { credential: token } = response;
-    console.log({ token });
+    this._store.dispatch(
+      googleSignInRequested({
+        googleSignInDTO: {
+          token,
+        },
+      })
+    );
   }
 
   initializeGoogleSignIn() {
     google.accounts.id.initialize({
-      client_id: this.clientId,
+      client_id: environment.googleClientId,
       callback: this.handleCredentialResponse.bind(this),
     });
 

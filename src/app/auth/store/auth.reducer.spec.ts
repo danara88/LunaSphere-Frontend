@@ -1,6 +1,14 @@
-import { ApiErrorResp, ApiStatus } from '@/shared/models';
-import { registerlUserSuccess, registerUserFail, registerUserRequested } from './auth.actions';
+import { ApiDataResp, ApiErrorResp, ApiStatus } from '@/shared/models';
+import {
+  googleSignInFail,
+  googleSignInRequested,
+  googleSignInSuccess,
+  registerlUserSuccess,
+  registerUserFail,
+  registerUserRequested,
+} from './auth.actions';
 import { authReducer, initialState } from './auth.reducer';
+import { AuthResponse } from '../auth.schema';
 
 describe('authReducer', () => {
   it('should return previous state', () => {
@@ -57,6 +65,68 @@ describe('authReducer', () => {
         user: null,
         callApiStatus: ApiStatus.FAIL,
         error: mockApiErrorResp,
+      });
+    });
+
+    it('should set auth state as loading when google sign in is requested', () => {
+      const action = googleSignInRequested({
+        googleSignInDTO: {
+          token: 'faketoken',
+        },
+      });
+
+      const result = authReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        callApiStatus: ApiStatus.LOADING,
+        error: null,
+      });
+    });
+
+    it('should set auth state with errors when google sign in fails', () => {
+      const mockApiErrorResp = {
+        detail: 'Api error test',
+        title: 'Test error',
+        status: 500,
+        success: false,
+      } as ApiErrorResp;
+      const action = googleSignInFail({ error: mockApiErrorResp });
+
+      const result = authReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        user: null,
+        callApiStatus: ApiStatus.FAIL,
+        error: mockApiErrorResp,
+      });
+    });
+
+    it('should set auth state as success when google sign in succeed', () => {
+      const mockResponse = {
+        status: 200,
+        data: {
+          accessToken: 'xyz',
+          refreshToken: 'xyzo',
+          userDetails: {
+            id: 1,
+            firstName: 'Test',
+            lastName: 'Test',
+          },
+        },
+        success: true,
+      } as ApiDataResp<AuthResponse>;
+
+      const action = googleSignInSuccess({ authResponse: mockResponse.data });
+
+      const result = authReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        callApiStatus: ApiStatus.SUCCESS,
+        user: mockResponse.data.userDetails,
+        error: null,
       });
     });
   });

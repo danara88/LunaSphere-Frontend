@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
 import { ApiErrorResp } from '@/shared/models';
-import { registerlUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
+import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
 import { LoaderService } from '@/shared/services/loader/loader.service';
 import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
 import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
@@ -13,20 +12,20 @@ import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/
 @Injectable({
   providedIn: 'root',
 })
-export class RegisterUserRequestedEffect {
-  readonly registerUserRequested$ = createEffect(() =>
+export class GoogleSignInRequestedEffect {
+  readonly googleSignInRequested$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(registerUserRequested),
-      switchMap(({ registerUserDTO }) => {
-        this.loaderService.showLoader();
-        return this.authService.registerUser$(registerUserDTO);
+      ofType(googleSignInRequested),
+      switchMap(({ googleSignInDTO }) => {
+        this._loaderService.showLoader();
+        return this._authService.googleSignIn$(googleSignInDTO);
       }),
       switchMap((response) => {
-        this.loaderService.hideLoader();
+        this._loaderService.hideLoader();
         if (this.isApiErrorResponse(response)) {
-          return [registerUserFail({ error: response })];
+          return [googleSignInFail({ error: response })];
         }
-        return [registerlUserSuccess()];
+        return [googleSignInSuccess({ authResponse: response.data })];
       })
     )
   );
@@ -44,15 +43,14 @@ export class RegisterUserRequestedEffect {
 
   constructor(
     private readonly actions$: Actions,
-    private readonly router: Router,
-    private readonly loaderService: LoaderService,
-    private readonly authService: AuthService
+    private readonly _loaderService: LoaderService,
+    private readonly _authService: AuthService
   ) {
     const loaderConfig: LoaderConfig = {
       title: 'Verifying...',
       description: 'Please wait, we are processing your account.',
       spinnerType: SpinnerTypeEnum.DEFAULT,
     };
-    this.loaderService.loaderConfig = loaderConfig;
+    this._loaderService.loaderConfig = loaderConfig;
   }
 }
