@@ -3,29 +3,23 @@ import { of, ReplaySubject } from 'rxjs';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { marbles } from 'rxjs-marbles';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { RegisterUserRequestedEffect } from './register-user-requested.effect';
-import { registerlUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
+import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
 import { AuthService } from '@/auth/services/auth.service';
 import { LoaderService } from '@/shared/services/loader/loader.service';
 import { ApiDataResp, ApiErrorResp } from '@/shared/models/api-response.model';
-import { RegisterUserResponse } from '@/auth/auth.schema';
+import { AuthResponse } from '@/auth/auth.schema';
+import { GoogleSignInRequestedEffect } from './google-sign-in-requested.effect';
 
-describe('RegisterUserRequestedEffect', () => {
+describe('GoogleSignInRequestedEffect', () => {
   let actions$: ReplaySubject<any>;
   let mockStore: MockStore<any>;
-  let effects: RegisterUserRequestedEffect;
+  let effects: GoogleSignInRequestedEffect;
   let authService: AuthService;
-  let router: Router;
 
   const mockAuthService = {
-    registerUser$: () => of({}),
-  };
-
-  const mockRouter = {
-    navigate: jasmine.createSpy('navigate'),
+    googleSignIn$: () => of({}),
   };
 
   const mockLoaderService = {
@@ -36,16 +30,12 @@ describe('RegisterUserRequestedEffect', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
-        RegisterUserRequestedEffect,
+        GoogleSignInRequestedEffect,
         provideMockActions(() => actions$),
         provideMockStore(),
         {
           provide: AuthService,
           useValue: mockAuthService,
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
         },
         {
           provide: LoaderService,
@@ -55,10 +45,9 @@ describe('RegisterUserRequestedEffect', () => {
     }).compileComponents();
 
     actions$ = new ReplaySubject<any>();
-    effects = TestBed.inject(RegisterUserRequestedEffect);
+    effects = TestBed.inject(GoogleSignInRequestedEffect);
     mockStore = TestBed.inject(Store) as MockStore<any>;
     authService = TestBed.inject(AuthService);
-    router = TestBed.inject(Router);
   });
 
   afterEach(() => {
@@ -66,34 +55,40 @@ describe('RegisterUserRequestedEffect', () => {
   });
 
   it(
-    'should dispatch registerlUserSuccess',
+    'should dispatch googleSignInSuccess',
     marbles((m) => {
       const mockResponse = {
         status: 200,
         data: {
-          verificationToken: 'xyz',
-          verificationTokenExpires: 'xyz',
+          accessToken: 'xyz',
+          refreshToken: 'xyz',
+          userDetails: {
+            id: 1,
+            firstName: 'Test First Name',
+            lastName: 'Test Name',
+          },
         },
         success: true,
-      } as ApiDataResp<RegisterUserResponse>;
-      const expected$ = m.cold('(a)', { a: registerlUserSuccess() });
-      spyOn(authService, 'registerUser$').and.returnValue(of(mockResponse));
+      } as ApiDataResp<AuthResponse>;
+      const expected$ = m.cold('(a)', {
+        a: googleSignInSuccess({ authResponse: mockResponse.data }),
+      });
+      spyOn(authService, 'googleSignIn$').and.returnValue(of(mockResponse));
 
       actions$.next(
-        registerUserRequested({
-          registerUserDTO: {
-            email: 'test@test.com',
-            password: 'Test_123!',
+        googleSignInRequested({
+          googleSignInDTO: {
+            token: 'xyz',
           },
         })
       );
 
-      m.expect(effects.registerUserRequested$).toBeObservable(expected$);
+      m.expect(effects.googleSignInRequested$).toBeObservable(expected$);
     })
   );
 
   it(
-    'should dispatch registerUserFail',
+    'should dispatch googleSignInFail',
     marbles((m) => {
       const appError: ApiErrorResp = {
         detail: 'Error',
@@ -101,19 +96,18 @@ describe('RegisterUserRequestedEffect', () => {
         status: 500,
         success: false,
       };
-      spyOn(authService, 'registerUser$').and.returnValue(of(appError));
-      const expected$ = m.cold('(a)', { a: registerUserFail({ error: appError }) });
+      spyOn(authService, 'googleSignIn$').and.returnValue(of(appError));
+      const expected$ = m.cold('(a)', { a: googleSignInFail({ error: appError }) });
 
       actions$.next(
-        registerUserRequested({
-          registerUserDTO: {
-            email: 'test@test.com',
-            password: 'Test_123!',
+        googleSignInRequested({
+          googleSignInDTO: {
+            token: 'xyz',
           },
         })
       );
 
-      m.expect(effects.registerUserRequested$).toBeObservable(expected$);
+      m.expect(effects.googleSignInRequested$).toBeObservable(expected$);
     })
   );
 });

@@ -1,10 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
-
-import { ApiErrorResp, ApiMessageResp } from '@/shared/models';
-import { AuthResponse, RegisterUserDTO, RoleType, User } from '../auth.schema';
 import { environment } from 'src/environments/environment';
+
+import { ApiDataResp, ApiErrorResp, ApiMessageResp } from '@/shared/models';
+import {
+  AuthResponse,
+  GoogleSignInDTO,
+  RegisterUserDTO,
+  RegisterUserResponse,
+  RoleType,
+  User,
+  VerifyVerificationCodeRequest,
+} from '../auth.schema';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +20,41 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private readonly _http = inject(HttpClient);
   private readonly _registerUseV1 = '/api/v1/auth/register';
+  private readonly _googleSignInV1 = '/api/v1/auth/google-signin';
 
-  registerUser$(registerUserDTO: RegisterUserDTO): Observable<ApiMessageResp | ApiErrorResp> {
+  registerUser$(
+    registerUserDTO: RegisterUserDTO
+  ): Observable<ApiDataResp<RegisterUserResponse> | ApiErrorResp> {
     return this._http
-      .post<ApiMessageResp>(`${environment.baseApiUrl}${this._registerUseV1}`, registerUserDTO)
+      .post<
+        ApiDataResp<RegisterUserResponse>
+      >(`${environment.baseApiUrl}${this._registerUseV1}`, registerUserDTO)
+      .pipe(
+        map((resp) => resp),
+        catchError((error) => of(this.mapToAuthErrorResponse(error)))
+      );
+  }
+
+  googleSignIn$(
+    googleSignInDTO: GoogleSignInDTO
+  ): Observable<ApiDataResp<AuthResponse> | ApiErrorResp> {
+    return this._http
+      .post<
+        ApiDataResp<AuthResponse>
+      >(`${environment.baseApiUrl}${this._googleSignInV1}`, googleSignInDTO)
+      .pipe(
+        map((resp) => resp),
+        catchError((error) => of(this.mapToAuthErrorResponse(error)))
+      );
+  }
+
+  verifyVerificationCode$(
+    verifyVerificationCodeRequest: VerifyVerificationCodeRequest
+  ): Observable<ApiDataResp<AuthResponse> | ApiErrorResp> {
+    return this._http
+      .post<
+        ApiDataResp<AuthResponse>
+      >(`${environment.baseApiUrl}${this._registerUseV1}`, verifyVerificationCodeRequest)
       .pipe(
         map((resp) => resp),
         catchError((error) => of(this.mapToAuthErrorResponse(error)))

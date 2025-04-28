@@ -2,7 +2,14 @@ import { createReducer, on } from '@ngrx/store';
 
 import { ApiStatus } from '@/shared/models';
 import { AuthState } from './auth.state';
-import { registerlUserSuccess, registerUserFail, registerUserRequested } from './auth.actions';
+import {
+  googleSignInFail,
+  googleSignInRequested,
+  googleSignInSuccess,
+  registerlUserSuccess,
+  registerUserFail,
+  registerUserRequested,
+} from './auth.actions';
 
 export const initialState: AuthState = {
   user: null,
@@ -23,6 +30,23 @@ export const authReducer = createReducer(
     error: null,
   })),
   on(registerUserFail, (state, { error }) => ({
+    ...state,
+    user: null,
+    callApiStatus: ApiStatus.FAIL,
+    error,
+  })),
+  on(googleSignInRequested, (state) => ({
+    ...state,
+    callApiStatus: ApiStatus.LOADING,
+    error: null,
+  })),
+  on(googleSignInSuccess, (state, { authResponse }) => ({
+    ...state,
+    user: authResponse.userDetails,
+    callApiStatus: ApiStatus.SUCCESS,
+    error: null,
+  })),
+  on(googleSignInFail, (state, { error }) => ({
     ...state,
     user: null,
     callApiStatus: ApiStatus.FAIL,

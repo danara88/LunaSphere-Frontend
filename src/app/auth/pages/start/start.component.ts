@@ -1,5 +1,6 @@
-import { ButtonVariantEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
 import { Component } from '@angular/core';
+
+import { ButtonVariantEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
 
 @Component({
   selector: 'auth-start-page',

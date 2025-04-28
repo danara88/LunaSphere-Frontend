@@ -4,9 +4,25 @@ export interface AuthResponse<T = User> {
   readonly userDetails: T;
 }
 
+export interface RegisterUserResponse {
+  readonly verificationToken: string;
+  readonly verificationTokenExpires: string;
+}
+
+export interface VerifyVerificationCodeRequest {
+  readonly verificationCode: number;
+  readonly userEligibleForVerification: {
+    readonly encrytedVerificationToken: string;
+  };
+}
+
 export interface RegisterUserDTO {
   readonly email: string;
   readonly password: string;
+}
+
+export interface GoogleSignInDTO {
+  readonly token: string;
 }
 
 export interface User {

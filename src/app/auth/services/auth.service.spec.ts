@@ -4,8 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { AuthService } from './auth.service';
-import { RegisterUserDTO } from '../auth.schema';
-import { ApiMessageResp } from '@/shared/models';
+import { RegisterUserDTO, RegisterUserResponse } from '../auth.schema';
+import { ApiDataResp, ApiMessageResp } from '@/shared/models';
 import { environment } from 'src/environments/environment';
 
 describe('AuthService', () => {
@@ -38,9 +38,12 @@ describe('AuthService', () => {
 
     const mockResponse = {
       status: 200,
-      message: 'Succeed!',
+      data: {
+        verificationToken: 'xyz',
+        verificationTokenExpires: 'xyz',
+      },
       success: true,
-    } as ApiMessageResp;
+    } as ApiDataResp<RegisterUserResponse>;
 
     // `firstValueFrom` subscribes to the `Observable`, which makes the HTTP request,
     // and creates a `Promise` of the response

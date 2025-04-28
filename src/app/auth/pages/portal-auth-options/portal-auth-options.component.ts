@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleService } from '@/auth/services/google.service';
 import { ButtonVariantEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
 import { AccountType } from '@/auth/auth.schema';
+import { routes } from '@/shared/constants/routes';
 
 @Component({
   selector: 'app-portal-auth-options',
@@ -61,7 +62,7 @@ export class PortalAuthOptionsComponent implements OnInit, AfterViewInit {
 
   registerRedirect(): void {
     if (this._portal === AccountType.individual) {
-      this._router.navigate(['/auth/register-individual']);
+      this._router.navigate([routes.auth.registerIndividualPage]);
       return;
     }
   }
@@ -72,7 +73,7 @@ export class PortalAuthOptionsComponent implements OnInit, AfterViewInit {
 
   private _validatePortalParam(value: string): AccountType {
     if (!Object.values(AccountType).includes(value as AccountType)) {
-      this._router.navigate(['/auth']);
+      this._router.navigate([routes.auth.startPage]);
     }
     return value as AccountType;
   }
