@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, input, OnInit, signal } from '@angular/core';
 import {
   ButtonSizeEnum,
   ButtonTypeEnum,
@@ -14,10 +14,12 @@ export class LunaSphereButtonComponent implements OnInit {
   readonly size = input(ButtonSizeEnum.MEDIUM);
   readonly type = input(ButtonTypeEnum.SOLID);
   readonly text = input('Button Text');
+  readonly disabled = input(false);
 
   private _isPrimaryVariantButton = false;
   private _isSecondaryVariantButton = false;
   private _isDangerVariantButton = false;
+  private readonly _isOutlineTypeButton = signal(false);
   private _variant = ButtonVariantEnum.PRIMARY;
 
   @Input()
@@ -37,9 +39,14 @@ export class LunaSphereButtonComponent implements OnInit {
     return this._isDangerVariantButton;
   }
 
+  get isOutlineTypeButton() {
+    return this._isOutlineTypeButton;
+  }
+
   ngOnInit(): void {
     this._isPrimaryVariantButton = this._variant === ButtonVariantEnum.PRIMARY;
     this._isSecondaryVariantButton = this._variant === ButtonVariantEnum.SECONDARY;
     this._isDangerVariantButton = this._variant === ButtonVariantEnum.DANGER;
+    this._isOutlineTypeButton.set(this.type() === ButtonTypeEnum.OUTLINE);
   }
 }

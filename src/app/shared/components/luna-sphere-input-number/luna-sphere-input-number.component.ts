@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, forwardRef, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  input,
+  output,
+  viewChild,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -19,6 +27,10 @@ export class LunaSphereInputNumberComponent implements ControlValueAccessor {
   private _onChange: any = () => {};
   private _disabled = false;
   private _value!: number;
+
+  readonly onInputNumberChange = output<any>();
+
+  private readonly _inputHtmlElement = viewChild<ElementRef<HTMLInputElement>>('inputNumber');
 
   indexOrder = input(0);
 
@@ -47,12 +59,16 @@ export class LunaSphereInputNumberComponent implements ControlValueAccessor {
   }
 
   onInputChange(event: any): void {
+    this.onInputNumberChange.emit(event);
     const inputElement = event.target as HTMLInputElement;
     inputElement.value = inputElement.value.replace(/[^1-9]/g, '').slice(0, 1);
     this._value = Number(inputElement.value);
-    console.log(this._value);
     this._onChange(this._value);
     this._onTouched();
+  }
+
+  focus(): void {
+    this._inputHtmlElement()?.nativeElement.focus();
   }
 
   onBlur(): void {

@@ -3,7 +3,11 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
-import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
+import {
+  resendVerificationCodeFail,
+  resendVerificationCodeRequested,
+  resendVerificationCodeSuccess,
+} from '../auth.actions';
 import { LoaderService } from '@/shared/services/loader/loader.service';
 import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
 import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
@@ -12,20 +16,20 @@ import { isApiErrorResponse } from '@/shared/utils/api-utils';
 @Injectable({
   providedIn: 'root',
 })
-export class GoogleSignInRequestedEffect {
-  readonly googleSignInRequested$ = createEffect(() =>
+export class ResendVerificationCodeRequestedEffect {
+  readonly resendVerificationCodeRequested$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(googleSignInRequested),
-      switchMap(({ googleSignInDTO }) => {
+      ofType(resendVerificationCodeRequested),
+      switchMap(({ verificationToken }) => {
         this._loaderService.showLoader();
-        return this._authService.googleSignIn$(googleSignInDTO);
+        return this._authService.resendVerificationCode$(verificationToken);
       }),
       switchMap((response) => {
         this._loaderService.hideLoader();
         if (isApiErrorResponse(response)) {
-          return [googleSignInFail({ error: response })];
+          return [resendVerificationCodeFail({ error: response })];
         }
-        return [googleSignInSuccess({ authResponse: response.data })];
+        return [resendVerificationCodeSuccess()];
       })
     )
   );
@@ -36,8 +40,8 @@ export class GoogleSignInRequestedEffect {
     private readonly _authService: AuthService
   ) {
     const loaderConfig: LoaderConfig = {
-      title: 'Verifying...',
-      description: 'Please wait, we are processing your account.',
+      title: 'Sending...',
+      description: 'Please wait, we are sending a new verification code in this moment.',
       spinnerType: SpinnerTypeEnum.DEFAULT,
     };
     this._loaderService.loaderConfig = loaderConfig;

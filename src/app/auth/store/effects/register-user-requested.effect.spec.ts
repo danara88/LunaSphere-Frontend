@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { RegisterUserRequestedEffect } from './register-user-requested.effect';
-import { registerlUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
+import { registerUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
 import { AuthService } from '@/auth/services/auth.service';
 import { LoaderService } from '@/shared/services/loader/loader.service';
 import { ApiDataResp, ApiErrorResp } from '@/shared/models/api-response.model';
@@ -66,7 +66,7 @@ describe('RegisterUserRequestedEffect', () => {
   });
 
   it(
-    'should dispatch registerlUserSuccess',
+    'should dispatch registerUserSuccess',
     marbles((m) => {
       const mockResponse = {
         status: 200,
@@ -76,7 +76,9 @@ describe('RegisterUserRequestedEffect', () => {
         },
         success: true,
       } as ApiDataResp<RegisterUserResponse>;
-      const expected$ = m.cold('(a)', { a: registerlUserSuccess() });
+      const expected$ = m.cold('(a)', {
+        a: registerUserSuccess({ registerUserResponse: mockResponse.data }),
+      });
       spyOn(authService, 'registerUser$').and.returnValue(of(mockResponse));
 
       actions$.next(

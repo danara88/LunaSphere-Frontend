@@ -1,7 +1,12 @@
 <button
   data-testId="luna-sphere-button"
   class="btn w-full"
-  [ngClass]="{ 'btn-primary': isPrimaryVariantButton, 'btn-secondary': isSecondaryVariantButton }"
+  [ngClass]="{
+    'btn-primary--solid': isPrimaryVariantButton,
+    'btn-primary--outline': isOutlineTypeButton(),
+    'btn-secondary': isSecondaryVariantButton,
+  }"
+  [disabled]="disabled()"
   type="submit"
 >
   {{ text() }}
