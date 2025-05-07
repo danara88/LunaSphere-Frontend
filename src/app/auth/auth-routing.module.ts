@@ -6,6 +6,7 @@ import { PortalAuthOptionsComponent } from '@auth/pages/portal-auth-options/port
 import { AuthComponent } from './auth.component';
 import { StandardUserRegisterComponent } from './pages/standard-user-register/standard-user-register.component';
 import { AccountVerificationComponent } from './pages/account-verification/account-verification.component';
+import { VerifyAccountEligibilityGuard } from './guards/verify-account-eligibility.guard';
 
 const routes: Routes = [
   {
@@ -25,8 +26,9 @@ const routes: Routes = [
         component: StandardUserRegisterComponent,
       },
       {
-        path: 'verify-account',
+        path: 'verify-account/:verificationToken',
         component: AccountVerificationComponent,
+        canMatch: [VerifyAccountEligibilityGuard],
       },
     ],
   },
