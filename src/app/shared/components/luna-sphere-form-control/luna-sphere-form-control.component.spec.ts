@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LunaSphereFormControlComponent } from './luna-sphere-form-control.component';
-import { IconEnum, InputTypeEnum } from './models/luna-sphere-form-control.model';
+import { InputTypeEnum } from './models/luna-sphere-form-control.model';
+import { Icon } from '@/shared/models/app-icons.enum';
 
 describe('LunaSphereFormControlComponent', () => {
   let fixture: ComponentFixture<LunaSphereFormControlComponent>;
@@ -123,11 +124,11 @@ describe('LunaSphereFormControlComponent', () => {
     it('should toggle input type and visibility icon', () => {
       component.togglePasswordVisibility();
       expect(component.type).toBe(InputTypeEnum.TEXT);
-      expect(component.passwordVisibleIcon).toBe(IconEnum.VISIBILITY_ON);
+      expect(component.passwordVisibleIcon).toBe(Icon.VISIBILITY_ON);
 
       component.togglePasswordVisibility();
       expect(component.type).toBe(InputTypeEnum.PASSWORD);
-      expect(component.passwordVisibleIcon).toBe(IconEnum.VISIBILITY_OFF);
+      expect(component.passwordVisibleIcon).toBe(Icon.VISIBILITY_OFF);
     });
   });
 
@@ -193,10 +194,10 @@ describe('LunaSphereFormControlComponent', () => {
 
     it('should display correct icon', () => {
       fixture.componentRef.setInput('showIcon', true);
-      fixture.componentRef.setInput('icon', IconEnum.ARROW_BACK);
+      fixture.componentRef.setInput('icon', Icon.ARROW_BACK);
       fixture.detectChanges();
       const iconElement = compiled.querySelector('[data-testId="control-icon"]');
-      expect(iconElement?.textContent?.trim()).toBe(IconEnum.ARROW_BACK);
+      expect(iconElement?.textContent?.trim()).toBe(Icon.ARROW_BACK);
     });
   });
 });

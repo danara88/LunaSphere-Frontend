@@ -1,0 +1,36 @@
+<!-- Toasts Container -->
+<div
+  class="absolute right-5 top-5 flex flex-col gap-4 overflow-hidden w-[45rem] rounded-lg p-6 animate__animated animate__fadeInUp animate__faster"
+>
+  <!-- Toast -->
+  <div
+    data-testId="toast"
+    class="bg-neutral-100 flex items-center gap-6 px-6 py-6 w-full rounded-lg border-l-4 border-solid"
+    [ngClass]="{ 'border-success-500': isToastSuccess(), 'border-error-500': isToastError() }"
+  >
+    <i
+      data-testId="toast-icon"
+      class="material-icons text-[3.2rem]"
+      [ngClass]="{ 'text-success-500': isToastSuccess(), 'text-error-500': isToastError() }"
+    >
+      {{ toastIcon() }}
+    </i>
+    <div>
+      <span
+        data-testId="toast-title"
+        class="font-semibold"
+        [ngClass]="{ 'text-success-500': isToastSuccess(), 'text-error-500': isToastError() }"
+      >
+        @if (isToastSuccess()) {
+          Succeed!
+        }
+        @if (isToastError()) {
+          Error
+        }
+      </span>
+      <p class="text-neutral-800" data-testId="toast-detail">{{ toastDetail() }}</p>
+    </div>
+  </div>
+  <!-- Toast -->
+</div>
+<!-- Toasts Container -->

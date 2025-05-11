@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { IconEnum, InputTypeEnum } from './models/luna-sphere-form-control.model';
+import { InputTypeEnum } from './models/luna-sphere-form-control.model';
+import { Icon } from '@/shared/models/app-icons.enum';
 
 @Component({
   selector: 'luna-sphere-form-control',
@@ -25,7 +26,7 @@ import { IconEnum, InputTypeEnum } from './models/luna-sphere-form-control.model
 export class LunaSphereFormControlComponent implements ControlValueAccessor, OnInit {
   readonly name = input('name');
   readonly id = input('id');
-  readonly icon = input(IconEnum.MAIL_OUTLINE);
+  readonly icon = input(Icon.MAIL_OUTLINE);
   readonly showIcon = input(false);
   readonly placeholder = input('');
   readonly hasError = input(false);
@@ -38,8 +39,7 @@ export class LunaSphereFormControlComponent implements ControlValueAccessor, OnI
   private _type = InputTypeEnum.TEXT;
   private _isPasswordVisible = false;
   private _displayVisibilityIcon = false;
-  private _passwordVisibleIcon: IconEnum.VISIBILITY_OFF | IconEnum.VISIBILITY_ON =
-    IconEnum.VISIBILITY_OFF;
+  private _passwordVisibleIcon: Icon.VISIBILITY_OFF | Icon.VISIBILITY_ON = Icon.VISIBILITY_OFF;
 
   @Input() set type(value: InputTypeEnum) {
     this._type = value;
@@ -83,11 +83,11 @@ export class LunaSphereFormControlComponent implements ControlValueAccessor, OnI
     this._isPasswordVisible = !this._isPasswordVisible;
     if (this._isPasswordVisible) {
       this._type = InputTypeEnum.TEXT;
-      this._passwordVisibleIcon = IconEnum.VISIBILITY_ON;
+      this._passwordVisibleIcon = Icon.VISIBILITY_ON;
       return;
     }
     this._type = InputTypeEnum.PASSWORD;
-    this._passwordVisibleIcon = IconEnum.VISIBILITY_OFF;
+    this._passwordVisibleIcon = Icon.VISIBILITY_OFF;
   }
 
   writeValue(value: string): void {
