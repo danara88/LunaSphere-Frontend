@@ -1,4 +1,5 @@
 import { LoaderService } from '@/shared/services/loader/loader.service';
+import { ToastService } from '@/shared/services/toast/toast.service';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -10,4 +11,5 @@ import { Component, inject } from '@angular/core';
 })
 export class AuthComponent {
   readonly loaderService = inject(LoaderService);
+  readonly toastService = inject(ToastService);
 }

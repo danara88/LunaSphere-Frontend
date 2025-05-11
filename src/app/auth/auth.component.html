@@ -12,3 +12,7 @@
 @if (!loaderService.dismissLoader) {
   <loader-component />
 }
+
+@if (!toastService.dismissToast()) {
+  <luna-sphere-toast />
+}

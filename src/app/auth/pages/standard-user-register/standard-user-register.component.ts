@@ -6,11 +6,9 @@ import { RegisterUserDTO } from '@/auth/auth.schema';
 import { GoogleService } from '@/auth/services/google.service';
 import { AuthState, registerUserRequested } from '@/auth/store';
 import { ButtonVariantEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
-import {
-  IconEnum,
-  InputTypeEnum,
-} from '@/shared/components/luna-sphere-form-control/models/luna-sphere-form-control.model';
+import { InputTypeEnum } from '@/shared/components/luna-sphere-form-control/models/luna-sphere-form-control.model';
 import { FormUtils } from '@/shared/utils/form-utils';
+import { Icon } from '@/shared/models/app-icons.enum';
 
 @Component({
   selector: 'app-standard-user-register',
@@ -18,8 +16,8 @@ import { FormUtils } from '@/shared/utils/form-utils';
   styleUrl: './standard-user-register.component.scss',
 })
 export class StandardUserRegisterComponent implements OnInit, AfterViewInit {
-  readonly emailIcon = IconEnum.MAIL_OUTLINE;
-  readonly passwordFieldIcon = IconEnum.LOCK_OUTLINE;
+  readonly emailIcon = Icon.MAIL_OUTLINE;
+  readonly passwordFieldIcon = Icon.LOCK_OUTLINE;
   readonly inputTypeEnum = InputTypeEnum;
   readonly buttonVariantEnum = ButtonVariantEnum;
 

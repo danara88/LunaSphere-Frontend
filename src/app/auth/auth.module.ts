@@ -13,6 +13,7 @@ import { LunaSphereSpinnerModule } from '@/shared/components/luna-sphere-spinner
 import { LoaderComponent } from './components/loader/loader.component';
 import { AccountVerificationComponent } from './pages/account-verification/account-verification.component';
 import { LunaSphereInputNumberModule } from '../shared/components/luna-sphere-input-number/luna-sphere-input-number.module';
+import { LunaSphereToastModule } from '../shared/components/luna-sphere-toast/luna-sphere-toast.module';
 
 const authPages = [
   StartComponent,
@@ -29,7 +30,7 @@ const sharedModules = [
   LunaSphereFormControlModule,
   LunaSphereButtonModule,
   LunaSphereSpinnerModule,
-  LunaSphereSpinnerModule,
+  LunaSphereToastModule,
 ];
 
 @NgModule({
