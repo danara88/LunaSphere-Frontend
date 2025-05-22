@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 
@@ -33,7 +32,6 @@ export class RegisterUserRequestedEffect {
 
   constructor(
     private readonly actions$: Actions,
-    private readonly router: Router,
     private readonly loaderService: LoaderService,
     private readonly authService: AuthService
   ) {

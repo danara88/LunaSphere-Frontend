@@ -7,32 +7,49 @@
   <form [formGroup]="verifyCodesForm">
     <div class="my-8 flex justify-between">
       <luna-sphere-input-number
+        data-testid="digit-input-number"
         [indexOrder]="1"
         formControlName="digit1"
         (onInputNumberChange)="handleInputChange()"
       />
       <luna-sphere-input-number
+        data-testid="digit-input-number"
         [indexOrder]="2"
         formControlName="digit2"
         (onInputNumberChange)="handleInputChange()"
       />
       <luna-sphere-input-number
+        data-testid="digit-input-number"
         [indexOrder]="3"
         formControlName="digit3"
         (onInputNumberChange)="handleInputChange()"
       />
       <luna-sphere-input-number
+        data-testid="digit-input-number"
         [indexOrder]="4"
         formControlName="digit4"
         (onInputNumberChange)="handleInputChange()"
       />
     </div>
-    <p class="font-type-normal font-medium text-neutral-800 text-center mb-8">
-      You can send the code in
-      <span class="text-primary-500">{{ countDown() }}</span> seconds
-    </p>
+    @if (countDown() !== 0) {
+      <p
+        class="font-type-normal font-medium text-neutral-800 text-center mb-8"
+        data-testid="disable-re-send-code"
+      >
+        You can send the code in
+        <span class="text-primary-500">{{ countDown() }}</span> seconds
+      </p>
+    } @else {
+      <p
+        class="font-type-normal font-medium text-neutral-800 text-center mb-8"
+        data-testid="enable-re-send-code"
+      >
+        Need a new code? You can re-send it now — just click below.
+      </p>
+    }
   </form>
   <luna-sphere-button
+    data-testid="resend-code-button"
     text="Resend Code"
     [type]="buttonTypeEnum().OUTLINE"
     (click)="resendVerificationCode()"

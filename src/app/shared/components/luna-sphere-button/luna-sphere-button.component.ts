@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit, signal } from '@angular/core';
 import {
   ButtonSizeEnum,
   ButtonTypeEnum,
@@ -13,19 +13,15 @@ import {
 export class LunaSphereButtonComponent implements OnInit {
   readonly size = input(ButtonSizeEnum.MEDIUM);
   readonly type = input(ButtonTypeEnum.SOLID);
+  readonly variant = input(ButtonVariantEnum.PRIMARY);
   readonly text = input('Button Text');
   readonly disabled = input(false);
 
-  private _isPrimaryVariantButton = false;
-  private _isSecondaryVariantButton = false;
-  private _isDangerVariantButton = false;
+  private readonly _isPrimaryVariantButton = signal(false);
+  private readonly _isSecondaryVariantButton = signal(false);
+  private readonly _isDangerVariantButton = signal(false);
   private readonly _isOutlineTypeButton = signal(false);
-  private _variant = ButtonVariantEnum.PRIMARY;
-
-  @Input()
-  set variant(value: ButtonVariantEnum) {
-    this._variant = value;
-  }
+  private readonly _isSolidTypeButton = signal(false);
 
   get isPrimaryVariantButton() {
     return this._isPrimaryVariantButton;
@@ -43,10 +39,18 @@ export class LunaSphereButtonComponent implements OnInit {
     return this._isOutlineTypeButton;
   }
 
+  get isSolidTypeButton() {
+    return this._isSolidTypeButton;
+  }
+
   ngOnInit(): void {
-    this._isPrimaryVariantButton = this._variant === ButtonVariantEnum.PRIMARY;
-    this._isSecondaryVariantButton = this._variant === ButtonVariantEnum.SECONDARY;
-    this._isDangerVariantButton = this._variant === ButtonVariantEnum.DANGER;
+    // Variants
+    this._isPrimaryVariantButton.set(this.variant() === ButtonVariantEnum.PRIMARY);
+    this._isSecondaryVariantButton.set(this.variant() === ButtonVariantEnum.SECONDARY);
+    this._isDangerVariantButton.set(this.variant() === ButtonVariantEnum.DANGER);
+
+    // Types
     this._isOutlineTypeButton.set(this.type() === ButtonTypeEnum.OUTLINE);
+    this._isSolidTypeButton.set(this.type() === ButtonTypeEnum.SOLID);
   }
 }

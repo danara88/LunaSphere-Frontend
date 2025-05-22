@@ -28,7 +28,7 @@ export class LunaSphereInputNumberComponent implements ControlValueAccessor {
   private _disabled = false;
   private _value!: number;
 
-  readonly onInputNumberChange = output<any>();
+  readonly onInputNumberChange = output<Event>();
 
   private readonly _inputHtmlElement = viewChild<ElementRef<HTMLInputElement>>('inputNumber');
 
@@ -58,7 +58,7 @@ export class LunaSphereInputNumberComponent implements ControlValueAccessor {
     this._disabled = isDisabled;
   }
 
-  onInputChange(event: any): void {
+  onInputChange(event: Event): void {
     this.onInputNumberChange.emit(event);
     const inputElement = event.target as HTMLInputElement;
     inputElement.value = inputElement.value.replace(/[^1-9]/g, '').slice(0, 1);

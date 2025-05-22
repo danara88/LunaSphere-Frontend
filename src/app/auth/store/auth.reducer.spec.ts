@@ -3,12 +3,12 @@ import {
   googleSignInFail,
   googleSignInRequested,
   googleSignInSuccess,
-  registerlUserSuccess,
   registerUserFail,
   registerUserRequested,
+  registerUserSuccess,
 } from './auth.actions';
 import { authReducer, initialState } from './auth.reducer';
-import { AuthResponse } from '../auth.schema';
+import { AuthResponse, RegisterUserResponse } from '../auth.schema';
 
 describe('authReducer', () => {
   it('should return previous state', () => {
@@ -38,7 +38,12 @@ describe('authReducer', () => {
     });
 
     it('should set auth state as success when register user succeed', () => {
-      const action = registerlUserSuccess();
+      const mockRegisterUserResponse = {
+        verificationToken: 'xbc',
+        verificationTokenExpires: '1bv1',
+      } as RegisterUserResponse;
+
+      const action = registerUserSuccess({ registerUserResponse: mockRegisterUserResponse });
 
       const result = authReducer(initialState, action);
 

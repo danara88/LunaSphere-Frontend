@@ -9,13 +9,13 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { interval, map, Observable, take } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { VerifyVerificationCodeRequest } from '@/auth/auth.schema';
 import { accountVerificationRequested, resendVerificationCodeRequested } from '@/auth/store';
 import { ButtonTypeEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
 import { LunaSphereInputNumberComponent } from '@/shared/components/luna-sphere-input-number/luna-sphere-input-number.component';
-import { interval, map, Observable, take } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-account-verification',
@@ -27,24 +27,25 @@ export class AccountVerificationComponent implements OnInit {
   private readonly _activatedRoute = inject(ActivatedRoute);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _store = inject(Store);
-  private readonly _lunaSphereNumberInputs = viewChildren(LunaSphereInputNumberComponent);
 
+  private readonly _lunaSphereNumberInputs = viewChildren(LunaSphereInputNumberComponent);
   private readonly _verificationToken = signal('');
   private readonly _selectedInputIndex = signal(0);
-  readonly verifyCodesForm: FormGroup;
-  readonly buttonTypeEnum = signal(ButtonTypeEnum);
   private readonly _timerCountDownToGetNewCode$: Observable<number> = interval(1000).pipe(
     take(61),
     map((i) => 60 - i)
   );
+
+  readonly verifyCodesForm: FormGroup;
+  readonly buttonTypeEnum = signal(ButtonTypeEnum);
   readonly countDown = toSignal(this._timerCountDownToGetNewCode$, { initialValue: 60 });
 
   constructor() {
     this.verifyCodesForm = this._formBuilder.group({
-      digit1: [null, [Validators.required]],
-      digit2: [null, [Validators.required]],
-      digit3: [null, [Validators.required]],
-      digit4: [null, [Validators.required]],
+      digit1: [undefined, [Validators.required]],
+      digit2: [undefined, [Validators.required]],
+      digit3: [undefined, [Validators.required]],
+      digit4: [undefined, [Validators.required]],
     });
   }
 
@@ -52,7 +53,7 @@ export class AccountVerificationComponent implements OnInit {
     this._lunaSphereNumberInputs()[0].focus();
     this._verificationToken.set(this._activatedRoute.snapshot.params['verificationToken']);
     this.verifyCodesForm.valueChanges.subscribe((fields) => {
-      if (fields['digit1'] && fields['digit2'] && fields['digit3'] && fields['digit4']) {
+      if (!!fields['digit1'] && !!fields['digit2'] && !!fields['digit3'] && !!fields['digit4']) {
         this.handleAccountVerificationRequest();
       }
     });

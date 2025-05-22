@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
 import {
@@ -12,6 +12,8 @@ import { LoaderService } from '@/shared/services/loader/loader.service';
 import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
 import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
 import { isApiErrorResponse } from '@/shared/utils/api-utils';
+import { ToastService } from '@/shared/services/toast/toast.service';
+import { ToastSeverity } from '@/shared/components/luna-sphere-toast/models/luna-sphere-toast.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +36,43 @@ export class ResendVerificationCodeRequestedEffect {
     )
   );
 
+  readonly resendVerificationCodeSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(resendVerificationCodeSuccess),
+        tap(() => {
+          this._toastService.show({
+            detail: 'We have sent a verification code to your email. Please check your inbox.',
+            severity: ToastSeverity.SUCCESS,
+          });
+        })
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  readonly resendVerificationCodeFail$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(resendVerificationCodeFail),
+        tap(({ error }) => {
+          this._toastService.show({
+            detail: error.detail,
+            severity: ToastSeverity.ERRROR,
+          });
+        })
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
   constructor(
     private readonly actions$: Actions,
     private readonly _loaderService: LoaderService,
-    private readonly _authService: AuthService
+    private readonly _authService: AuthService,
+    private readonly _toastService: ToastService
   ) {
     const loaderConfig: LoaderConfig = {
       title: 'Sending...',
