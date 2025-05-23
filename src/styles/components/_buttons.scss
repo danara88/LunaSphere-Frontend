@@ -6,27 +6,49 @@
   outline: none;
   transition: all 400ms;
   &-primary {
-    @apply bg-primary-500 text-neutral-100;
     &--solid {
       @apply bg-primary-500 text-neutral-100;
+      &:hover {
+        @apply bg-primary-700 text-neutral-100;
+      }
+      &:active {
+        transition: all 100ms;
+        @apply bg-primary-600;
+      }
+      &:disabled {
+        @apply bg-primary-300;
+        cursor: not-allowed;
+      }
     }
     &--outline {
       @apply text-primary-500 bg-neutral-100;
       border: 0.1rem solid $color-primary-500;
+      &:hover {
+        @apply bg-primary-700 text-neutral-100;
+      }
+      &:active {
+        transition: all 100ms;
+        @apply bg-primary-600;
+      }
+      &:disabled {
+        @apply text-primary-200 bg-neutral-100;
+        cursor: not-allowed;
+        border: 0.1rem solid $color-primary-300;
+      }
     }
     &--link {
       @apply text-primary-500 bg-neutral-100;
-    }
-    &:hover {
-      @apply bg-primary-700;
-    }
-    &:active {
-      transition: all 100ms;
-      @apply bg-primary-600;
-    }
-    &:disabled {
-      @apply bg-primary-300;
-      cursor: not-allowed;
+      &:hover {
+        @apply bg-primary-700 text-neutral-100;
+      }
+      &:active {
+        transition: all 100ms;
+        @apply bg-primary-600;
+      }
+      &:disabled {
+        @apply bg-primary-300;
+        cursor: not-allowed;
+      }
     }
   }
   &-secondary {

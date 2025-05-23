@@ -1,9 +1,21 @@
-import { VerifyVerificationCodeRequest } from '@/auth/auth.schema';
-import { AuthService } from '@/auth/services/auth.service';
-import { ButtonTypeEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  OnInit,
+  signal,
+  viewChildren,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { interval, map, Observable, take } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { VerifyVerificationCodeRequest } from '@/auth/auth.schema';
+import { accountVerificationRequested, resendVerificationCodeRequested } from '@/auth/store';
+import { ButtonTypeEnum } from '@/shared/components/luna-sphere-button/models/luna-sphere-button.model';
+import { LunaSphereInputNumberComponent } from '@/shared/components/luna-sphere-input-number/luna-sphere-input-number.component';
 
 @Component({
   selector: 'app-account-verification',
@@ -12,41 +24,68 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountVerificationComponent implements OnInit {
-  private _verificationToken: string = '';
-  private readonly _authService = inject(AuthService);
-  private readonly _activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly _activatedRoute = inject(ActivatedRoute);
+  private readonly _formBuilder = inject(FormBuilder);
+  private readonly _store = inject(Store);
+
+  private readonly _lunaSphereNumberInputs = viewChildren(LunaSphereInputNumberComponent);
+  private readonly _verificationToken = signal('');
+  private readonly _selectedInputIndex = signal(0);
+  private readonly _timerCountDownToGetNewCode$: Observable<number> = interval(1000).pipe(
+    take(61),
+    map((i) => 60 - i)
+  );
+
   readonly verifyCodesForm: FormGroup;
-  readonly buttonTypeEnum = ButtonTypeEnum;
+  readonly buttonTypeEnum = signal(ButtonTypeEnum);
+  readonly countDown = toSignal(this._timerCountDownToGetNewCode$, { initialValue: 60 });
 
   constructor() {
-    this.verifyCodesForm = this.formBuilder.group({
-      digit1: [null, [Validators.required]],
-      digit2: [null, [Validators.required]],
-      digit3: [null, [Validators.required]],
-      digit4: [null, [Validators.required]],
+    this.verifyCodesForm = this._formBuilder.group({
+      digit1: [undefined, [Validators.required]],
+      digit2: [undefined, [Validators.required]],
+      digit3: [undefined, [Validators.required]],
+      digit4: [undefined, [Validators.required]],
     });
   }
+
   ngOnInit(): void {
-    this._verificationToken = this._activatedRoute.snapshot.params['verificationTo'];
+    this._lunaSphereNumberInputs()[0].focus();
+    this._verificationToken.set(this._activatedRoute.snapshot.params['verificationToken']);
+    this.verifyCodesForm.valueChanges.subscribe((fields) => {
+      if (!!fields['digit1'] && !!fields['digit2'] && !!fields['digit3'] && !!fields['digit4']) {
+        this.handleAccountVerificationRequest();
+      }
+    });
   }
 
-  onSubmit(): void {
-    console.log(this.verifyCodesForm.controls);
+  resendVerificationCode(): void {
+    if (this.countDown() !== 0) return;
+    this._store.dispatch(
+      resendVerificationCodeRequested({ verificationToken: this._verificationToken() })
+    );
+  }
+
+  private handleAccountVerificationRequest() {
     const digit1 = parseInt(this.verifyCodesForm.controls['digit1'].value);
     const digit2 = parseInt(this.verifyCodesForm.controls['digit2'].value);
     const digit3 = parseInt(this.verifyCodesForm.controls['digit3'].value);
     const digit4 = parseInt(this.verifyCodesForm.controls['digit4'].value);
 
     const code = digit1.toString() + digit2.toString() + digit3.toString() + digit4.toString();
-    const req: VerifyVerificationCodeRequest = {
+    const verifyVerificationCodeRequest: VerifyVerificationCodeRequest = {
       verificationCode: parseInt(code),
       userEligibleForVerification: {
-        encrytedVerificationToken: this._verificationToken,
+        encrytedVerificationToken: this._verificationToken(),
       },
     };
-    this._authService.verifyVerificationCode$(req).subscribe((resp) => {
-      console.log(resp);
-    });
+
+    this._store.dispatch(accountVerificationRequested({ verifyVerificationCodeRequest }));
+  }
+
+  handleInputChange(): void {
+    this._selectedInputIndex.update((currIndex) => currIndex + 1);
+    if (this._selectedInputIndex() >= this._lunaSphereNumberInputs().length) return;
+    this._lunaSphereNumberInputs()[this._selectedInputIndex()].focus();
   }
 }

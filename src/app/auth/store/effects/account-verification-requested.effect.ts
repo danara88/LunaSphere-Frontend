@@ -3,7 +3,11 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
-import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
+import {
+  accountVerificationFail,
+  accountVerificationRequested,
+  accountVerificationSuccess,
+} from '../auth.actions';
 import { LoaderService } from '@/shared/services/loader/loader.service';
 import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
 import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
@@ -12,20 +16,20 @@ import { isApiErrorResponse } from '@/shared/utils/api-utils';
 @Injectable({
   providedIn: 'root',
 })
-export class GoogleSignInRequestedEffect {
-  readonly googleSignInRequested$ = createEffect(() =>
+export class AccountVerificationRequestedEffect {
+  readonly accountVerificationRequested$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(googleSignInRequested),
-      switchMap(({ googleSignInDTO }) => {
+      ofType(accountVerificationRequested),
+      switchMap(({ verifyVerificationCodeRequest }) => {
         this._loaderService.showLoader();
-        return this._authService.googleSignIn$(googleSignInDTO);
+        return this._authService.verifyVerificationCode$(verifyVerificationCodeRequest);
       }),
       switchMap((response) => {
         this._loaderService.hideLoader();
         if (isApiErrorResponse(response)) {
-          return [googleSignInFail({ error: response })];
+          return [accountVerificationFail({ error: response })];
         }
-        return [googleSignInSuccess({ authResponse: response.data })];
+        return [accountVerificationSuccess({ authResponse: response.data })];
       })
     )
   );
@@ -37,7 +41,7 @@ export class GoogleSignInRequestedEffect {
   ) {
     const loaderConfig: LoaderConfig = {
       title: 'Verifying...',
-      description: 'Please wait, we are processing your account.',
+      description: 'Please wait, we are verifying your code in this moment.',
       spinnerType: SpinnerTypeEnum.DEFAULT,
     };
     this._loaderService.loaderConfig = loaderConfig;
