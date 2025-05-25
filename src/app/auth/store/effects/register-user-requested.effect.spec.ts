@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { RegisterUserRequestedEffect } from './register-user-requested.effect';
 import { registerUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
 import { AuthService } from '@/auth/services/auth.service';
-import { LoaderService } from '@/shared/services/loader/loader.service';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
 import { ApiDataResp, ApiErrorResp } from '@/shared/models/api-response.model';
 import { RegisterUserResponse } from '@/auth/auth.schema';
 

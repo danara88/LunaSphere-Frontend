@@ -1,18 +1,8 @@
-@if (loaderService.dismissLoader) {
-  <div class="auth h-screen flex items-start justify-center sm:items-center">
-    <div
-      class="auth__container py-16 px-8 md:px-24 mx-auto flex flex-col sm:max-w-4xl sm:min-w-4xl w-full bg-neutral-100 rounded-2xl"
-    >
-      <!-- Render auth content from pages here -->
-      <router-outlet></router-outlet>
-    </div>
+<div class="auth h-screen flex items-start justify-center sm:items-center">
+  <div
+    class="auth__container py-16 px-8 md:px-24 mx-auto flex flex-col sm:max-w-4xl sm:min-w-4xl w-full bg-neutral-100 rounded-2xl"
+  >
+    <!-- Render auth content from pages here -->
+    <router-outlet></router-outlet>
   </div>
-}
-
-@if (!loaderService.dismissLoader) {
-  <loader-component />
-}
-
-@if (!toastService.dismissToast()) {
-  <luna-sphere-toast />
-}
+</div>

@@ -8,9 +8,8 @@ import {
   accountVerificationRequested,
   accountVerificationSuccess,
 } from '../auth.actions';
-import { LoaderService } from '@/shared/services/loader/loader.service';
-import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
-import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
+import { LoaderTypeEnum } from '@/shared/components/luna-sphere-loader/models/luna-sphere-loader.model';
 import { isApiErrorResponse } from '@/shared/utils/api-utils';
 
 @Injectable({
@@ -21,7 +20,11 @@ export class AccountVerificationRequestedEffect {
     this.actions$.pipe(
       ofType(accountVerificationRequested),
       switchMap(({ verifyVerificationCodeRequest }) => {
-        this._loaderService.showLoader();
+        this._loaderService.showLoader({
+          title: 'Verifying...',
+          detail: 'Please wait, we are verifying your code in this moment.',
+          type: LoaderTypeEnum.MODAL_SCREEN,
+        });
         return this._authService.verifyVerificationCode$(verifyVerificationCodeRequest);
       }),
       switchMap((response) => {
@@ -38,12 +41,5 @@ export class AccountVerificationRequestedEffect {
     private readonly actions$: Actions,
     private readonly _loaderService: LoaderService,
     private readonly _authService: AuthService
-  ) {
-    const loaderConfig: LoaderConfig = {
-      title: 'Verifying...',
-      description: 'Please wait, we are verifying your code in this moment.',
-      spinnerType: SpinnerTypeEnum.DEFAULT,
-    };
-    this._loaderService.loaderConfig = loaderConfig;
-  }
+  ) {}
 }

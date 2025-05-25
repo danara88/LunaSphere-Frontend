@@ -8,12 +8,11 @@ import {
   resendVerificationCodeRequested,
   resendVerificationCodeSuccess,
 } from '../auth.actions';
-import { LoaderService } from '@/shared/services/loader/loader.service';
-import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
-import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
+import { LoaderTypeEnum } from '@/shared/components/luna-sphere-loader/models/luna-sphere-loader.model';
 import { isApiErrorResponse } from '@/shared/utils/api-utils';
-import { ToastService } from '@/shared/services/toast/toast.service';
-import { ToastSeverity } from '@/shared/components/luna-sphere-toast/models/luna-sphere-toast.model';
+import { ToastNotificationService } from '@/shared/services/toast-notification-service/toast-notification.service';
+import { ToastSeverity } from '@/shared/components/luna-sphere-toast-notification/models/luna-sphere-toast-notification.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +22,11 @@ export class ResendVerificationCodeRequestedEffect {
     this.actions$.pipe(
       ofType(resendVerificationCodeRequested),
       switchMap(({ verificationToken }) => {
-        this._loaderService.showLoader();
+        this._loaderService.showLoader({
+          title: 'Sending...',
+          detail: 'Please wait, we are sending a new verification code in this moment.',
+          type: LoaderTypeEnum.MODAL_SCREEN,
+        });
         return this._authService.resendVerificationCode$(verificationToken);
       }),
       switchMap((response) => {
@@ -41,7 +44,7 @@ export class ResendVerificationCodeRequestedEffect {
       this.actions$.pipe(
         ofType(resendVerificationCodeSuccess),
         tap(() => {
-          this._toastService.show({
+          this._toastNotificationService.show({
             detail: 'We have sent a verification code to your email. Please check your inbox.',
             severity: ToastSeverity.SUCCESS,
           });
@@ -57,7 +60,7 @@ export class ResendVerificationCodeRequestedEffect {
       this.actions$.pipe(
         ofType(resendVerificationCodeFail),
         tap(({ error }) => {
-          this._toastService.show({
+          this._toastNotificationService.show({
             detail: error.detail,
             severity: ToastSeverity.ERRROR,
           });
@@ -72,13 +75,6 @@ export class ResendVerificationCodeRequestedEffect {
     private readonly actions$: Actions,
     private readonly _loaderService: LoaderService,
     private readonly _authService: AuthService,
-    private readonly _toastService: ToastService
-  ) {
-    const loaderConfig: LoaderConfig = {
-      title: 'Sending...',
-      description: 'Please wait, we are sending a new verification code in this moment.',
-      spinnerType: SpinnerTypeEnum.DEFAULT,
-    };
-    this._loaderService.loaderConfig = loaderConfig;
-  }
+    private readonly _toastNotificationService: ToastNotificationService
+  ) {}
 }

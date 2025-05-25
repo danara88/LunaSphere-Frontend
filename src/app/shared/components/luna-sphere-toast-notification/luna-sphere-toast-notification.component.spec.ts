@@ -1,30 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LunaSphereToastComponent } from './luna-sphere-toast.component';
-import { ToastService } from '@/shared/services/toast/toast.service';
-import { ToastData, ToastSeverity } from './models/luna-sphere-toast.model';
+import { LunaSphereToastNotificationComponent } from './luna-sphere-toast-notification.component';
+import { ToastNotificationService } from '@/shared/services/toast-notification-service/toast-notification.service';
+import { ToastData, ToastSeverity } from './models/luna-sphere-toast-notification.model';
 import { Icon } from '@/shared/models/app-icons.enum';
 
-describe('LunaSphereToastComponent', () => {
-  let fixture: ComponentFixture<LunaSphereToastComponent>;
-  let component: LunaSphereToastComponent;
+describe('LunaSphereToastNotificationComponent', () => {
+  let fixture: ComponentFixture<LunaSphereToastNotificationComponent>;
+  let component: LunaSphereToastNotificationComponent;
   let compiled: HTMLElement;
-  let toastServiceSpy: jasmine.SpyObj<ToastService>;
+  let toastNotificationServiceSpy: jasmine.SpyObj<ToastNotificationService>;
 
   beforeEach(async () => {
-    toastServiceSpy = jasmine.createSpyObj('ToastService', ['data']);
+    toastNotificationServiceSpy = jasmine.createSpyObj('ToastNotificationService', ['data']);
 
     await TestBed.configureTestingModule({
-      declarations: [LunaSphereToastComponent],
+      declarations: [LunaSphereToastNotificationComponent],
       providers: [
         {
-          provide: ToastService,
-          useValue: toastServiceSpy,
+          provide: ToastNotificationService,
+          useValue: toastNotificationServiceSpy,
         },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LunaSphereToastComponent);
+    fixture = TestBed.createComponent(LunaSphereToastNotificationComponent);
     component = fixture.componentInstance;
     compiled = fixture.nativeElement as HTMLElement;
   });
@@ -40,7 +40,7 @@ describe('LunaSphereToastComponent', () => {
     } as ToastData;
 
     beforeEach(() => {
-      toastServiceSpy.data.and.returnValue(mockToastDataSuccess);
+      toastNotificationServiceSpy.data.and.returnValue(mockToastDataSuccess);
     });
 
     it('should set the toast notification as success when the severity is SUCCESS', () => {
@@ -79,7 +79,7 @@ describe('LunaSphereToastComponent', () => {
     } as ToastData;
 
     beforeEach(() => {
-      toastServiceSpy.data.and.returnValue(mockToastDataError);
+      toastNotificationServiceSpy.data.and.returnValue(mockToastDataError);
     });
 
     it('should set the toast notification as error when the severity is ERROR', () => {

@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 
 import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
 import { AuthService } from '@/auth/services/auth.service';
-import { LoaderService } from '@/shared/services/loader/loader.service';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
 import { ApiDataResp, ApiErrorResp } from '@/shared/models/api-response.model';
 import { AuthResponse } from '@/auth/auth.schema';
 import { GoogleSignInRequestedEffect } from './google-sign-in-requested.effect';

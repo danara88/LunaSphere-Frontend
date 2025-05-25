@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ToastService } from './toast.service';
-import { ToastSeverity } from '@/shared/components/luna-sphere-toast/models/luna-sphere-toast.model';
+import { ToastNotificationService } from './toast-notification.service';
+import { ToastSeverity } from '@/shared/components/luna-sphere-toast-notification/models/luna-sphere-toast-notification.model';
 
-describe('ToastService', () => {
-  let service: ToastService;
+describe('ToastNotificationService', () => {
+  let service: ToastNotificationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({});
-    service = TestBed.inject(ToastService);
+    service = TestBed.inject(ToastNotificationService);
   });
 
   it('should be created', () => {

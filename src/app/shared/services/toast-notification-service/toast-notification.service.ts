@@ -1,10 +1,10 @@
-import { ToastData } from '@/shared/components/luna-sphere-toast/models/luna-sphere-toast.model';
+import { ToastData } from '@/shared/components/luna-sphere-toast-notification/models/luna-sphere-toast-notification.model';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ToastService {
+export class ToastNotificationService {
   private readonly _dismissToast = signal(true);
   private readonly _toastData = signal<ToastData | undefined>(undefined);
   private readonly _defaultTime = signal(5000);
