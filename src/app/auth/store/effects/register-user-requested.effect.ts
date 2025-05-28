@@ -4,10 +4,9 @@ import { switchMap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
 import { registerUserSuccess, registerUserFail, registerUserRequested } from '../auth.actions';
-import { LoaderService } from '@/shared/services/loader/loader.service';
-import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
-import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
 import { isApiErrorResponse } from '@/shared/utils/api-utils';
+import { LoaderTypeEnum } from '@/shared/components/luna-sphere-loader/models/luna-sphere-loader.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,11 @@ export class RegisterUserRequestedEffect {
     this.actions$.pipe(
       ofType(registerUserRequested),
       switchMap(({ registerUserDTO }) => {
-        this.loaderService.showLoader();
+        this.loaderService.showLoader({
+          title: 'Verifying...',
+          detail: 'Please wait, we are processing your account.',
+          type: LoaderTypeEnum.MODAL_SCREEN,
+        });
         return this.authService.registerUser$(registerUserDTO);
       }),
       switchMap((response) => {
@@ -34,12 +37,5 @@ export class RegisterUserRequestedEffect {
     private readonly actions$: Actions,
     private readonly loaderService: LoaderService,
     private readonly authService: AuthService
-  ) {
-    const loaderConfig: LoaderConfig = {
-      title: 'Verifying...',
-      description: 'Please wait, we are processing your account.',
-      spinnerType: SpinnerTypeEnum.DEFAULT,
-    };
-    this.loaderService.loaderConfig = loaderConfig;
-  }
+  ) {}
 }

@@ -4,9 +4,8 @@ import { switchMap } from 'rxjs';
 
 import { AuthService } from '@/auth/services/auth.service';
 import { googleSignInFail, googleSignInRequested, googleSignInSuccess } from '../auth.actions';
-import { LoaderService } from '@/shared/services/loader/loader.service';
-import { LoaderConfig } from '@/auth/components/loader/models/loader.model';
-import { SpinnerTypeEnum } from '@/shared/components/luna-sphere-spinner/models/luna-sphere-spinner.model';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
+import { LoaderTypeEnum } from '@/shared/components/luna-sphere-loader/models/luna-sphere-loader.model';
 import { isApiErrorResponse } from '@/shared/utils/api-utils';
 
 @Injectable({
@@ -17,7 +16,11 @@ export class GoogleSignInRequestedEffect {
     this.actions$.pipe(
       ofType(googleSignInRequested),
       switchMap(({ googleSignInDTO }) => {
-        this._loaderService.showLoader();
+        this._loaderService.showLoader({
+          title: 'Verifying...',
+          detail: 'Please wait, we are processing your account.',
+          type: LoaderTypeEnum.MODAL_SCREEN,
+        });
         return this._authService.googleSignIn$(googleSignInDTO);
       }),
       switchMap((response) => {
@@ -34,12 +37,5 @@ export class GoogleSignInRequestedEffect {
     private readonly actions$: Actions,
     private readonly _loaderService: LoaderService,
     private readonly _authService: AuthService
-  ) {
-    const loaderConfig: LoaderConfig = {
-      title: 'Verifying...',
-      description: 'Please wait, we are processing your account.',
-      spinnerType: SpinnerTypeEnum.DEFAULT,
-    };
-    this._loaderService.loaderConfig = loaderConfig;
-  }
+  ) {}
 }

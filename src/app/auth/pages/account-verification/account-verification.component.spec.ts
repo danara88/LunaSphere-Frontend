@@ -115,7 +115,7 @@ describe('AccountVerificationComponent', () => {
       expect(document.activeElement).toEqual(inputNumberElements[0].querySelector('input'));
     });
 
-    it('should focus second input field when first input field was filled', () => {
+    it('should call handleInputChange on input number change', () => {
       spyOn(component, 'handleInputChange');
       const inputNumberElements = fixture.debugElement.queryAll(
         By.css('[data-testid="digit-input-number"]')
@@ -126,10 +126,6 @@ describe('AccountVerificationComponent', () => {
       fixture.detectChanges();
 
       expect(component.handleInputChange).toHaveBeenCalled();
-
-      // expect(document.activeElement).toEqual(
-      //   inputNumberElements[1].nativeElement.querySelector('input')
-      // );
     });
   });
 

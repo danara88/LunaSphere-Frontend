@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+@if (dismissLoader() || (isFullLoaderType() && !dismissLoader())) {
+  <router-outlet data-testid="content"></router-outlet>
+}
+
+@if (!dismissLoader()) {
+  <luna-sphere-loader data-testid="loader" />
+}
+
+@if (!dismissToast()) {
+  <luna-sphere-toast data-testid="toast" />
+}

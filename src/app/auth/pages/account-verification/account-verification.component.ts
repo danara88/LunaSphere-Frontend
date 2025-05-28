@@ -52,8 +52,8 @@ export class AccountVerificationComponent implements OnInit {
   ngOnInit(): void {
     this._lunaSphereNumberInputs()[0].focus();
     this._verificationToken.set(this._activatedRoute.snapshot.params['verificationToken']);
-    this.verifyCodesForm.valueChanges.subscribe((fields) => {
-      if (!!fields['digit1'] && !!fields['digit2'] && !!fields['digit3'] && !!fields['digit4']) {
+    this.verifyCodesForm.valueChanges.subscribe(() => {
+      if (!this.isSomeFormControlEmpty()) {
         this.handleAccountVerificationRequest();
       }
     });
@@ -64,6 +64,12 @@ export class AccountVerificationComponent implements OnInit {
     this._store.dispatch(
       resendVerificationCodeRequested({ verificationToken: this._verificationToken() })
     );
+  }
+
+  handleInputChange(): void {
+    this._selectedInputIndex.update((currIndex) => currIndex + 1);
+    if (this._selectedInputIndex() >= this._lunaSphereNumberInputs().length) return;
+    this._lunaSphereNumberInputs()[this._selectedInputIndex()].focus();
   }
 
   private handleAccountVerificationRequest() {
@@ -83,9 +89,11 @@ export class AccountVerificationComponent implements OnInit {
     this._store.dispatch(accountVerificationRequested({ verifyVerificationCodeRequest }));
   }
 
-  handleInputChange(): void {
-    this._selectedInputIndex.update((currIndex) => currIndex + 1);
-    if (this._selectedInputIndex() >= this._lunaSphereNumberInputs().length) return;
-    this._lunaSphereNumberInputs()[this._selectedInputIndex()].focus();
+  private isSomeFormControlEmpty(): boolean {
+    const emptyValues = [undefined, null];
+    return Object.keys(this.verifyCodesForm.controls).some((control) => {
+      const controlValue = this.verifyCodesForm.controls[control].value;
+      return emptyValues.includes(controlValue);
+    });
   }
 }

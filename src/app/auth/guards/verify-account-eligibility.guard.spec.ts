@@ -3,7 +3,7 @@ import { UrlSegment } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
-import { LoaderService } from '@/shared/services/loader/loader.service';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
 import { VerifyAccountEligibilityGuard } from './verify-account-eligibility.guard';
 import { ApiErrorResp, ApiMessageResp } from '@/shared/models';
 

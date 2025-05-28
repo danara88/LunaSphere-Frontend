@@ -5,7 +5,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Store } from '@ngrx/store';
 
 import { googleSignInSuccess } from '../auth.actions';
-import { LoaderService } from '@/shared/services/loader/loader.service';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
 import { GoogleSignInSuccessEffect } from './google-sign-in-success.effect';
 import { Router } from '@angular/router';
 import { ApiDataResp } from '@/shared/models';

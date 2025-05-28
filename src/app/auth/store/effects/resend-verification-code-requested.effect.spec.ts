@@ -1,29 +1,27 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Store } from '@ngrx/store';
 import { marbles } from 'rxjs-marbles';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { of, ReplaySubject } from 'rxjs';
 
 import { ResendVerificationCodeRequestedEffect } from './resend-verification-code-requested.effect';
 import { AuthService } from '@/auth/services/auth.service';
-import { LoaderService } from '@/shared/services/loader/loader.service';
-import { ToastService } from '@/shared/services/toast/toast.service';
+import { LoaderService } from '@/shared/services/loader-service/loader.service';
+import { ToastNotificationService } from '@/shared/services/toast-notification-service/toast-notification.service';
 import {
   resendVerificationCodeFail,
   resendVerificationCodeRequested,
   resendVerificationCodeSuccess,
 } from '../auth.actions';
 import { ApiErrorResp, ApiMessageResp } from '@/shared/models';
-import { ToastSeverity } from '@/shared/components/luna-sphere-toast/models/luna-sphere-toast.model';
+import { ToastSeverity } from '@/shared/components/luna-sphere-toast-notification/models/luna-sphere-toast-notification.model';
 
 describe('ResendVerificationCodeRequestedEffect', () => {
   let actions$: ReplaySubject<any>;
-  let mockStore: MockStore<any>;
   let effects: ResendVerificationCodeRequestedEffect;
   let authService: AuthService;
   let loaderService: LoaderService;
-  let toastService: ToastService;
+  let toastNotificationService: ToastNotificationService;
 
   const mockAuthService = {
     resendVerificationCode$: () => of({}),
@@ -34,7 +32,7 @@ describe('ResendVerificationCodeRequestedEffect', () => {
     hideLoader: jasmine.createSpy('hideLoader'),
   };
 
-  const mockToastService = {
+  const mockToastNotificationService = {
     show: jasmine.createSpy('show'),
   };
 
@@ -53,18 +51,17 @@ describe('ResendVerificationCodeRequestedEffect', () => {
           useValue: mockLoaderService,
         },
         {
-          provide: ToastService,
-          useValue: mockToastService,
+          provide: ToastNotificationService,
+          useValue: mockToastNotificationService,
         },
       ],
     });
 
     actions$ = new ReplaySubject<any>();
     effects = TestBed.inject(ResendVerificationCodeRequestedEffect);
-    mockStore = TestBed.inject(Store) as MockStore<any>;
     authService = TestBed.inject(AuthService);
     loaderService = TestBed.inject(LoaderService);
-    toastService = TestBed.inject(ToastService);
+    toastNotificationService = TestBed.inject(ToastNotificationService);
   });
 
   afterEach(() => {
@@ -150,7 +147,7 @@ describe('ResendVerificationCodeRequestedEffect', () => {
       actions$.next(resendVerificationCodeSuccess());
 
       effects.resendVerificationCodeSuccess$.subscribe(() => {
-        expect(toastService.show).toHaveBeenCalledWith({
+        expect(toastNotificationService.show).toHaveBeenCalledWith({
           detail: 'We have sent a verification code to your email. Please check your inbox.',
           severity: ToastSeverity.SUCCESS,
         });
@@ -169,7 +166,7 @@ describe('ResendVerificationCodeRequestedEffect', () => {
       actions$.next(resendVerificationCodeFail({ error: appError }));
 
       effects.resendVerificationCodeFail$.subscribe(() => {
-        expect(toastService.show).toHaveBeenCalledWith({
+        expect(toastNotificationService.show).toHaveBeenCalledWith({
           detail: appError.detail,
           severity: ToastSeverity.ERRROR,
         });
