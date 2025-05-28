@@ -10,7 +10,7 @@
         {{ data()?.title }}
       </h1>
       <div class="flex justify-center my-8">
-        <div class="loader__spinner"></div>
+        <div class="loader-container__spinner"></div>
       </div>
       <p class="font-type-normal text-center text-neutral-700" data-testId="modal-loader-detail">
         {{ data()?.detail }}
@@ -18,7 +18,7 @@
     </div>
   </div>
 } @else {
-  <div class="loader-full-screen" data-testId="full-loader-screen">
-    <div class="loader-full-screen__spinner"></div>
+  <div class="loader-container" data-testId="full-loader-screen">
+    <div class="loader-container__spinner"></div>
   </div>
 }
